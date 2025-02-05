@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Registro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Registro</h1>
+        <form action="/editar_registro/{{ registro[0] }}" method="POST">
+            <label for="comentario">Comentário:</label>
+            <input type="text" id="comentario" name="comentario" value="{{ registro[5] or '' }}" required>
+            <button type="submit">Salvar</button>
+        </form>
+        <a href="{{ url_for('registros') }}">Voltar</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Registros</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Data</th>
+                    <th>Entrada</th>
+                    <th>Saída</th>
+                    <th>Comentário</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    <td>{{ registro[1] }}</td>
+                    <td>{{ registro[2] }}</td>
+                    <td>{{ registro[3] }}</td>
+                    <td>{{ registro[4] or 'Aberto' }}</td>
+                    <td>{{ registro[5] or 'Nenhum' }}</td>
+                    <td>
+                        {% if not registro[4] %}
+                        <form action="/registrar_saida/{{ registro[0] }}" method="POST" style="display:inline;">
+                            <input type="text" name="comentario" placeholder="Comentário" required>
+                            <button type="submit">Registrar Saída</button>
+                        </form>
+                        {% endif %}
+                        <a href="/editar_registro/{{ registro[0] }}">Editar</a>
+                        <a href="/excluir_registro/{{ registro[0] }}">Excluir</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('index') }}">Voltar</a>
+    </div>
+</body>
+</html>

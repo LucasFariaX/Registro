@@ -1,0 +1,87 @@
+/* Estilos gerais */
+body {
+    font-family: 'Courier New', monospace; /* Fonte minimalista e retrô */
+    background-color: #0d0d0d; /* Fundo preto */
+    color: #d3d3d3; /* Texto cinza claro */
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 50px auto;
+    background-color: #1a1a1a; /* Fundo escuro cinza */
+    padding: 20px;
+    border: 1px solid #d3d3d3; /* Borda cinza */
+    box-shadow: 0 0 5px rgba(211, 211, 211, 0.2); /* Sombra sutil */
+}
+
+h1 {
+    text-align: center;
+    color: #ffffff; /* Texto branco */
+    font-size: 1.5rem;
+    font-weight: normal;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #d3d3d3; /* Cinza claro */
+}
+
+input[type="text"] {
+    width: 97%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #262626; /* Fundo escuro cinza */
+    border: 1px solid #d3d3d3; /* Borda cinza */
+    color: #ffffff; /* Texto branco */
+    font-family: 'Courier New', monospace;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #333333; /* Cinza médio */
+    color: #ffffff; /* Texto branco */
+    border: 1px solid #d3d3d3; /* Borda cinza */
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #444444; /* Cinza mais claro no hover */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #1a1a1a; /* Fundo escuro */
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #d3d3d3; /* Borda cinza */
+    text-align: left;
+}
+
+th {
+    background-color: #262626; /* Fundo escuro cinza */
+    color: #ffffff; /* Texto branco */
+}
+
+a {
+    color: #d3d3d3; /* Link cinza claro */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ffffff; /* Link branco no hover */
+    text-decoration: underline;
+}
