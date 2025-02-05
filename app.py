@@ -1,16 +1,25 @@
-from flask import Flask, render_template, request, redirect, url_for
-import sqlite3
+import os
+import psycopg2
 from datetime import datetime
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-# Função para criar o banco de dados
+# Configurações do banco de dados
+DATABASE_URL = os.getenv('DATABASE_URL')  # URL do banco de dados no Render
+
+# Função para conectar ao banco de dados
+def get_db_connection():
+    conn = psycopg2.connect(DATABASE_URL)
+    return conn
+
+# Função para criar a tabela de registros
 def criar_banco():
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS registros (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             nome TEXT NOT NULL,
             data TEXT NOT NULL,
             entrada TEXT NOT NULL,
@@ -33,10 +42,10 @@ def registrar_entrada():
     data = datetime.now().strftime("%Y-%m-%d")
     entrada = datetime.now().strftime("%H:%M:%S")
     
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO registros (nome, data, entrada) VALUES (?, ?, ?)
+        INSERT INTO registros (nome, data, entrada) VALUES (%s, %s, %s)
     ''', (nome, data, entrada))
     conn.commit()
     conn.close()
@@ -49,10 +58,10 @@ def registrar_saida(id):
     saida = datetime.now().strftime("%H:%M:%S")
     comentario = request.form['comentario']
     
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-        UPDATE registros SET saida = ?, comentario = ? WHERE id = ?
+        UPDATE registros SET saida = %s, comentario = %s WHERE id = %s
     ''', (saida, comentario, id))
     conn.commit()
     conn.close()
@@ -62,7 +71,7 @@ def registrar_saida(id):
 # Rota para visualizar registros
 @app.route('/registros')
 def registros():
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM registros')
     registros = cursor.fetchall()
@@ -76,19 +85,19 @@ def editar_registro(id):
     if request.method == 'POST':
         comentario = request.form['comentario']
         
-        conn = sqlite3.connect('database.db')
+        conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute('''
-            UPDATE registros SET comentario = ? WHERE id = ?
+            UPDATE registros SET comentario = %s WHERE id = %s
         ''', (comentario, id))
         conn.commit()
         conn.close()
         
         return redirect(url_for('registros'))
     
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM registros WHERE id = ?', (id,))
+    cursor.execute('SELECT * FROM registros WHERE id = %s', (id,))
     registro = cursor.fetchone()
     conn.close()
     
@@ -97,9 +106,9 @@ def editar_registro(id):
 # Rota para excluir registro
 @app.route('/excluir_registro/<int:id>')
 def excluir_registro(id):
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('DELETE FROM registros WHERE id = ?', (id,))
+    cursor.execute('DELETE FROM registros WHERE id = %s', (id,))
     conn.commit()
     conn.close()
     
@@ -107,4 +116,4 @@ def excluir_registro(id):
 
 if __name__ == '__main__':
     criar_banco()
-    app.run(debug=True, host='0.0.0.0')  # Rodar em todos os IPs da rede local
+    app.run(host='0.0.0.0', port=10000)  # Use uma porta específica
